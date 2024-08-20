@@ -45,12 +45,12 @@ class PartialProject:
 
         def fetch(o, l):
             resp = requests.get(
-                f"https://api.scratch.mit.edu/projects/{self.id}/remixes/?limit={l}&offset={o}",
+                f"https://apiscratch.synt2x.xyz/projects/{self.id}/remixes/?limit={l}&offset={o}",
                 headers={
                     "x-csrftoken": "a",
                     "x-requested-with": "XMLHttpRequest",
                     "Cookie": "scratchcsrftoken=a;scratchlanguage=en;",
-                    "referer": "https://scratch.mit.edu",
+                    "referer": "https://scratch.synt2x.xyz",
                     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36",
                 },
             ).json()
@@ -82,7 +82,7 @@ class PartialProject:
                     remixes=project["stats"]["remixes"],
                     views=project["stats"]["views"],
                     title=project["title"],
-                    url="https://scratch.mit.edu/projects/" + str(project["id"]),
+                    url="https://scratch.synt2x.xyz/projects/" + str(project["id"]),
                     _session=self._session,
                 )
             )
@@ -151,7 +151,7 @@ class Project(PartialProject):
         """
         if self._session is not None:
             project = requests.get(
-                f"https://api.scratch.mit.edu/projects/{self.id}",
+                f"https://apiscratch.synt2x.xyz/projects/{self.id}",
                 headers={
                     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.88 Safari/537.36",
                     "x-token": self._session.xtoken,
@@ -166,7 +166,7 @@ class Project(PartialProject):
             project = project.json()
         else:
             project = requests.get(
-                f"https://api.scratch.mit.edu/projects/{self.id}",
+                f"https://apiscratch.synt2x.xyz/projects/{self.id}",
                 headers={
                     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.88 Safari/537.36",
                     "Pragma": "no-cache",
@@ -196,7 +196,7 @@ class Project(PartialProject):
                 filename = str(self.id)
             self.update()
             response = requests.get(
-                f"https://projects.scratch.mit.edu/{self.id}?token={self.project_token}"
+                f"https://apiscratch.synt2x.xyz/{self.id}?token={self.project_token}"
             )
             filename = filename.replace(".sb3", "")
             open(f"{dir}{filename}.sb3", "wb").write(response.content)
@@ -217,7 +217,7 @@ class Project(PartialProject):
         try:
             self.update()
             return requests.get(
-                f"https://projects.scratch.mit.edu/{self.id}?token={self.project_token}"
+                f"https://apiscratch.synt2x.xyz/{self.id}?token={self.project_token}"
             ).json()
         except Exception:
             raise (
@@ -236,7 +236,7 @@ class Project(PartialProject):
         try:
             self.update()
             return requests.get(
-                f"https://projects.scratch.mit.edu/{self.id}?token={self.project_token}"
+                f"https://apiscratch.synt2x.xyz/{self.id}?token={self.project_token}"
             ).json()["meta"]["agent"]
         except Exception:
             raise (
@@ -250,7 +250,7 @@ class Project(PartialProject):
             self.id = int(project["id"])
         except KeyError:
             pass
-        self.url = "https://scratch.mit.edu/projects/" + str(self.id)
+        self.url = "https://scratch.synt2x.xyz/projects/" + str(self.id)
         self.author = project["author"]["username"]
         self.comments_allowed = project["comments_allowed"]
         self.instructions = project["instructions"]
@@ -292,7 +292,7 @@ class Project(PartialProject):
             list<dict>: A list containing the studios this project is in, each studio is represented by a dict.
         """
 
-        url = f"https://api.scratch.mit.edu/users/{self.author}/projects/{self.id}/studios"
+        url = f"https://apiscratch.synt2x.xyz/users/{self.author}/projects/{self.id}/studios"
 
         api_data = api_iterative_simple(url, limit, offset, max_req_limit=40)
         return api_data
@@ -309,7 +309,7 @@ class Project(PartialProject):
             list<dict>: A list containing the requested comments as dicts.
         """
 
-        url = f"https://api.scratch.mit.edu/users/{self.author}/projects/{self.id}/comments"
+        url = f"https://apiscratch.synt2x.xyz/users/{self.author}/projects/{self.id}/comments"
 
         api_data = api_iterative_simple(
             url,
@@ -323,7 +323,7 @@ class Project(PartialProject):
         return api_data
 
     def get_comment_replies(self, *, comment_id, limit=None, offset=0):
-        url = f"https://api.scratch.mit.edu/users/{self.author}/projects/{self.id}/comments/{comment_id}/replies"
+        url = f"https://apiscratch.synt2x.xyz/users/{self.author}/projects/{self.id}/comments/{comment_id}/replies"
 
         api_data = api_iterative_simple(
             url,
@@ -338,7 +338,7 @@ class Project(PartialProject):
 
     def get_comment(self, comment_id):
         r = requests.get(
-            f"https://api.scratch.mit.edu/users/{self.author}/projects/{self.id}/comments/{comment_id}",
+            f"https://apiscratch.synt2x.xyz/users/{self.author}/projects/{self.id}/comments/{comment_id}",
             headers=self._headers,
             cookies=self._cookies
         ).json()
@@ -351,7 +351,7 @@ class Project(PartialProject):
             raise (exceptions.Unauthenticated)
             return
         r = requests.post(
-            f"https://api.scratch.mit.edu/proxy/projects/{self.id}/loves/user/{self._session._username}",
+            f"https://apiscratch.synt2x.xyz/proxy/projects/{self.id}/loves/user/{self._session._username}",
             headers=self._headers,
             cookies=self._cookies,
         ).json()
@@ -366,7 +366,7 @@ class Project(PartialProject):
             raise (exceptions.Unauthenticated)
             return
         r = requests.delete(
-            f"https://api.scratch.mit.edu/proxy/projects/{self.id}/loves/user/{self._session._username}",
+            f"https://apiscratch.synt2x.xyz/proxy/projects/{self.id}/loves/user/{self._session._username}",
             headers=self._headers,
             cookies=self._cookies,
         ).json()
@@ -381,7 +381,7 @@ class Project(PartialProject):
             raise (exceptions.Unauthenticated)
             return
         r = requests.post(
-            f"https://api.scratch.mit.edu/proxy/projects/{self.id}/favorites/user/{self._session._username}",
+            f"https://apiscratch.synt2x.xyz/proxy/projects/{self.id}/favorites/user/{self._session._username}",
             headers=self._headers,
             cookies=self._cookies,
         ).json()
@@ -396,7 +396,7 @@ class Project(PartialProject):
             raise (exceptions.Unauthenticated)
             return
         r = requests.delete(
-            f"https://api.scratch.mit.edu/proxy/projects/{self.id}/favorites/user/{self._session._username}",
+            f"https://apiscratch.synt2x.xyz/proxy/projects/{self.id}/favorites/user/{self._session._username}",
             headers=self._headers,
             cookies=self._cookies,
         ).json()
@@ -408,7 +408,7 @@ class Project(PartialProject):
         Increases the project's view counter by 1.
         """
         requests.post(
-            f"https://api.scratch.mit.edu/users/{self.author}/projects/{self.id}/views/",
+            f"https://apiscratch.synt2x.xyz/users/{self.author}/projects/{self.id}/views/",
             headers=headers,
         )
 
@@ -425,7 +425,7 @@ class Project(PartialProject):
         data = {"comments_allowed": False}
         self._update_from_dict(
             requests.put(
-                f"https://api.scratch.mit.edu/projects/{self.id}/",
+                f"https://apiscratch.synt2x.xyz/projects/{self.id}/",
                 headers=self._json_headers,
                 cookies=self._cookies,
                 data=json.dumps(data),
@@ -445,7 +445,7 @@ class Project(PartialProject):
         data = {"comments_allowed": True}
         self._update_from_dict(
             requests.put(
-                f"https://api.scratch.mit.edu/projects/{self.id}/",
+                f"https://apiscratch.synt2x.xyz/projects/{self.id}/",
                 headers=self._json_headers,
                 cookies=self._cookies,
                 data=json.dumps(data),
@@ -465,7 +465,7 @@ class Project(PartialProject):
         data = {"comments_allowed": not self.comments_allowed}
         self._update_from_dict(
             requests.put(
-                f"https://api.scratch.mit.edu/projects/{self.id}/",
+                f"https://apiscratch.synt2x.xyz/projects/{self.id}/",
                 headers=self._json_headers,
                 cookies=self._cookies,
                 data=json.dumps(data),
@@ -484,7 +484,7 @@ class Project(PartialProject):
             return
         if self.shared is not True:
             requests.put(
-                f"https://api.scratch.mit.edu/proxy/projects/{self.id}/share/",
+                f"https://apiscratch.synt2x.xyz/proxy/projects/{self.id}/share/",
                 headers=self._json_headers,
                 cookies=self._cookies,
             )
@@ -501,7 +501,7 @@ class Project(PartialProject):
             return
         if self.shared is not False:
             requests.put(
-                f"https://api.scratch.mit.edu/proxy/projects/{self.id}/unshare/",
+                f"https://apiscratch.synt2x.xyz/proxy/projects/{self.id}/unshare/",
                 headers=self._json_headers,
                 cookies=self._cookies,
             )
@@ -519,7 +519,7 @@ class Project(PartialProject):
         with open(file, "rb") as f:
             thumbnail = f.read()
         requests.post(
-            f"https://scratch.mit.edu/internalapi/project/thumbnail/{self.id}/set/",
+            f"https://scratch.synt2x.xyz/internalapi/project/thumbnail/{self.id}/set/",
             data=thumbnail,
             headers=self._headers,
             cookies=self._cookies,
@@ -539,7 +539,7 @@ class Project(PartialProject):
             raise (exceptions.Unauthorized)
             return
         return requests.delete(
-            f"https://api.scratch.mit.edu/proxy/comments/project/{self.id}/comment/{comment_id}/",
+            f"https://apiscratch.synt2x.xyz/proxy/comments/project/{self.id}/comment/{comment_id}/",
             headers=self._headers,
             cookies=self._cookies,
         ).headers
@@ -555,7 +555,7 @@ class Project(PartialProject):
             raise (exceptions.Unauthenticated)
             return
         return requests.delete(
-            f"https://api.scratch.mit.edu/proxy/comments/project/{self.id}/comment/{comment_id}/report",
+            f"https://apiscratch.synt2x.xyz/proxy/comments/project/{self.id}/comment/{comment_id}/report",
             headers=self._headers,
             cookies=self._cookies,
         )
@@ -580,10 +580,10 @@ class Project(PartialProject):
             "parent_id": parent_id,
         }
         headers = self._json_headers
-        headers["referer"] = "https://scratch.mit.edu/projects/" + str(self.id) + "/"
+        headers["referer"] = "https://scratch.synt2x.xyz/projects/" + str(self.id) + "/"
         return json.loads(
             requests.post(
-                f"https://api.scratch.mit.edu/proxy/comments/project/{self.id}/",
+                f"https://apiscratch.synt2x.xyz/proxy/comments/project/{self.id}/",
                 headers=headers,
                 cookies=self._cookies,
                 data=json.dumps(data),
@@ -624,7 +624,7 @@ class Project(PartialProject):
             return
 
         r = requests.put(
-            f"https://projects.scratch.mit.edu/{self.id}",
+            f"https://apiscratch.synt2x.xyz/{self.id}",
             headers=self._headers,
             cookies=self._cookies,
             json=json_data,
@@ -651,7 +651,7 @@ class Project(PartialProject):
             raise (exceptions.Unauthorized("You must be the project owner to do this."))
             return
         r = requests.put(
-            f"https://api.scratch.mit.edu/projects/{self.id}",
+            f"https://apiscratch.synt2x.xyz/projects/{self.id}",
             headers=self._headers,
             cookies=self._cookies,
             data=json.dumps({"title": text}),
@@ -669,7 +669,7 @@ class Project(PartialProject):
             raise (exceptions.Unauthorized("You must be the project owner to do this."))
             return
         r = requests.put(
-            f"https://api.scratch.mit.edu/projects/{self.id}",
+            f"https://apiscratch.synt2x.xyz/projects/{self.id}",
             headers=self._headers,
             cookies=self._cookies,
             data=json.dumps({"instructions": text}),
@@ -687,7 +687,7 @@ class Project(PartialProject):
             raise (exceptions.Unauthorized("You must be the project owner to do this."))
             return
         r = requests.put(
-            f"https://api.scratch.mit.edu/projects/{self.id}",
+            f"https://apiscratch.synt2x.xyz/projects/{self.id}",
             headers=self._headers,
             cookies=self._cookies,
             data=json.dumps({"description": text}),
@@ -798,7 +798,7 @@ def explore_projects(
         If you want to use these methods, get the explore page projects with :meth:`scratchattach.session.Session.search_projects` instead.
     """
 
-    url = f"https://api.scratch.mit.edu/explore/projects"
+    url = f"https://apiscratch.synt2x.xyz/explore/projects"
 
     api_data = api_iterative_simple(
         url,
@@ -838,7 +838,7 @@ def search_projects(*, query="", mode="trending", language="en", limit=None, off
     if not query:
         raise ValueError("The query can't be empty for search")
 
-    url = f"https://api.scratch.mit.edu/search/projects"
+    url = f"https://apiscratch.synt2x.xyz/search/projects"
 
     api_data = api_iterative_simple(
         url,
