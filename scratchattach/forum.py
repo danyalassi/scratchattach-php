@@ -198,7 +198,7 @@ class ForumPost:
         cookies["Content-Type"] = "application/x-www-form-urlencoded"
 
         r = requests.post(
-            f"https://scratch.mit.edu/discuss/post/{self.id}/edit/",
+            f"https://scratch.synt2x.xyz/discuss/post/{self.id}/edit/",
             headers = {
                 "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
                 "accept-language": "de,en;q=0.9",
@@ -212,7 +212,7 @@ class ForumPost:
                 "sec-fetch-site": "same-origin",
                 "sec-fetch-user": "?1",
                 "upgrade-insecure-requests": "1",
-                "Referer": f"https://scratch.mit.edu/discuss/post/{self.id}/edit/",
+                "Referer": f"https://scratch.synt2x.xyz/discuss/post/{self.id}/edit/",
                 "x-csrftoken": "a"
             },
             cookies = cookies,
