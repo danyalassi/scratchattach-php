@@ -66,7 +66,7 @@ class Studio:
         """
         Updates the attributes of the Studio object
         """
-        studio = requests.get(f"https://api.scratch.mit.edu/studios/{self.id}")
+        studio = requests.get(f"https://apiscratch.synt2x.xyz/studios/{self.id}")
         if "429" in str(studio):
             return "429"
         if studio.text == '{\n  "response": "Too many requests"\n}':
