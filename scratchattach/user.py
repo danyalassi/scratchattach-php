@@ -69,9 +69,9 @@ class User:
         Returns:
             boolean : True if the user exists, False if the user is deleted, None if an error occured
         """
-        if requests.get(f"https://scratch.mit.edu/users/{self.username}/").status_code == 200:
+        if requests.get(f"https://scratch.synt2x.xyz/users/{self.username}/").status_code == 200:
             return True
-        if requests.get(f"https://scratch.mit.edu/users/{self.username}/").status_code == 404:
+        if requests.get(f"https://scratch.synt2x.xyz/users/{self.username}/").status_code == 404:
             return False
 
     def is_new_scratcher(self):
@@ -80,7 +80,7 @@ class User:
             boolean : True if the user has the New Scratcher status, else False
         """
         try:
-            res = requests.get(f"https://scratch.mit.edu/users/{self.username}/").text
+            res = requests.get(f"https://scratch.synt2x.xyz/users/{self.username}/").text
             group=res[res.rindex('<span class="group">'):][:70]
             return "new scratcher" in group.lower()
         except Exception:
@@ -90,7 +90,7 @@ class User:
         """
         Updates the attributes of the User object
         """
-        r = requests.get(f"https://api.scratch.mit.edu/users/{self.username}/")
+        r = requests.get(f"https://apiscratch.synt2x.xyz/users/{self.username}/")
         if "429" in str(r):
             return "429"
         if r.text == '{\n  "response": "Too many requests"\n}':
@@ -138,7 +138,7 @@ class User:
 
     def message_count(self):
 
-        return json.loads(requests.get(f"https://api.scratch.mit.edu/users/{self.username}/messages/count/", headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.3c6 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36',}).text)["count"]
+        return json.loads(requests.get(f"https://apiscratch.synt2x.xyz/users/{self.username}/messages/count/", headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.3c6 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36',}).text)["count"]
 
     def featured_data(self):
         """           
@@ -146,7 +146,7 @@ class User:
             dict: Gets info on the user's featured project and featured label (like "Featured project", "My favorite things", etc.)
         """        
         try:
-            response = json.loads(requests.get(f"https://scratch.mit.edu/site-api/users/all/{self.username}/").text)
+            response = json.loads(requests.get(f"https://scratch.synt2x.xyz/site-api/users/all/{self.username}/").text)
             return {
                 "label":response["featured_project_label_name"],
                 "project":
@@ -163,12 +163,12 @@ class User:
     def follower_count(self):
         # follower count
         text = requests.get(
-            f"https://scratch.mit.edu/users/{self.username}/followers/",
+            f"https://scratch.synt2x.xyz/users/{self.username}/followers/",
             headers = {
                 "x-csrftoken": "a",
                 "x-requested-with": "XMLHttpRequest",
                 "Cookie": "scratchcsrftoken=a;scratchlanguage=en;",
-                "referer": "https://scratch.mit.edu",
+                "referer": "https://scratch.synt2x.xyz",
                 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36',
             }
         ).text
@@ -179,12 +179,12 @@ class User:
     def following_count(self):
         # following count
         text = requests.get(
-            f"https://scratch.mit.edu/users/{self.username}/following/",
+            f"https://scratch.synt2x.xyz/users/{self.username}/following/",
             headers = {
                 "x-csrftoken": "a",
                 "x-requested-with": "XMLHttpRequest",
                 "Cookie": "scratchcsrftoken=a;scratchlanguage=en;",
-                "referer": "https://scratch.mit.edu",
+                "referer": "https://scratch.synt2x.xyz",
                 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36',
             }
         ).text
@@ -201,7 +201,7 @@ class User:
             limit=40
         followers = []
         response = requests.get(
-            f"https://api.scratch.mit.edu/users/{self.username}/followers/?limit={limit}&offset={offset}").json()
+            f"https://apiscratch.synt2x.xyz/users/{self.username}/followers/?limit={limit}&offset={offset}").json()
         for follower in response:
             try:
                 followers.append(User(
@@ -234,7 +234,7 @@ class User:
             limit=40
         followers = []
         response = requests.get(
-            f"https://api.scratch.mit.edu/users/{self.username}/following/?limit={limit}&offset={offset}").json()
+            f"https://apiscratch.synt2x.xyz/users/{self.username}/following/?limit={limit}&offset={offset}").json()
         for follower in response:
             try:
                 followers.append(User(
@@ -274,12 +274,12 @@ class User:
 
     def project_count(self):
         text = requests.get(
-            f"https://scratch.mit.edu/users/{self.username}/projects/",
+            f"https://scratch.synt2x.xyz/users/{self.username}/projects/",
             headers = {
                 "x-csrftoken": "a",
                 "x-requested-with": "XMLHttpRequest",
                 "Cookie": "scratchcsrftoken=a;scratchlanguage=en;",
-                "referer": "https://scratch.mit.edu",
+                "referer": "https://scratch.synt2x.xyz",
                 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36',
             }
         ).text
@@ -289,12 +289,12 @@ class User:
 
     def project_count(self):
         text = requests.get(
-            f"https://scratch.mit.edu/users/{self.username}/projects/",
+            f"https://scratch.synt2x.xyz/users/{self.username}/projects/",
             headers = {
                 "x-csrftoken": "a",
                 "x-requested-with": "XMLHttpRequest",
                 "Cookie": "scratchcsrftoken=a;scratchlanguage=en;",
-                "referer": "https://scratch.mit.edu",
+                "referer": "https://scratch.synt2x.xyz",
                 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36',
             }
         ).text
@@ -304,12 +304,12 @@ class User:
 
     def studio_count(self):
         text = requests.get(
-            f"https://scratch.mit.edu/users/{self.username}/studios/",
+            f"https://scratch.synt2x.xyz/users/{self.username}/studios/",
             headers = {
                 "x-csrftoken": "a",
                 "x-requested-with": "XMLHttpRequest",
                 "Cookie": "scratchcsrftoken=a;scratchlanguage=en;",
-                "referer": "https://scratch.mit.edu",
+                "referer": "https://scratch.synt2x.xyz",
                 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36',
             }
         ).text
@@ -319,12 +319,12 @@ class User:
 
     def studios_following_count(self):
         text = requests.get(
-            f"https://scratch.mit.edu/users/{self.username}/studios/",
+            f"https://scratch.synt2x.xyz/users/{self.username}/studios/",
             headers = {
                 "x-csrftoken": "a",
                 "x-requested-with": "XMLHttpRequest",
                 "Cookie": "scratchcsrftoken=a;scratchlanguage=en;",
-                "referer": "https://scratch.mit.edu",
+                "referer": "https://scratch.synt2x.xyz",
                 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36',
             }
         ).text
@@ -333,7 +333,7 @@ class User:
         return int(text)
 
     def studios(self, *, limit=40, offset=0):
-        return requests.get(f"https://api.scratch.mit.edu/users/{self.username}/studios/curate?limit={limit}&offset={offset}").json()
+        return requests.get(f"https://apiscratch.synt2x.xyz/users/{self.username}/studios/curate?limit={limit}&offset={offset}").json()
 
     def projects(self, *, limit=None, offset=0):
         """
@@ -342,23 +342,23 @@ class User:
         """
         if limit is None:
             _projects = json.loads(requests.get(
-                f"https://api.scratch.mit.edu/users/{self.username}/projects/?offset={offset}",
+                f"https://apiscratch.synt2x.xyz/users/{self.username}/projects/?offset={offset}",
                 headers = {
                     "x-csrftoken": "a",
                     "x-requested-with": "XMLHttpRequest",
                     "Cookie": "scratchcsrftoken=a;scratchlanguage=en;",
-                    "referer": "https://scratch.mit.edu",
+                    "referer": "https://scratch.synt2x.xyz",
                     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36',
                 }
             ).text)
         else:
             _projects = requests.get(
-                f"https://api.scratch.mit.edu/users/{self.username}/projects/?limit={limit}&offset={offset}",
+                f"https://apiscratch.synt2x.xyz/users/{self.username}/projects/?limit={limit}&offset={offset}",
                 headers = {
                     "x-csrftoken": "a",
                     "x-requested-with": "XMLHttpRequest",
                     "Cookie": "scratchcsrftoken=a;scratchlanguage=en;",
-                    "referer": "https://scratch.mit.edu",
+                    "referer": "https://scratch.synt2x.xyz",
                     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36',
                 }
             ).json()
@@ -382,7 +382,7 @@ class User:
                 remixes = project_dict["stats"]["remixes"],
                 views = project_dict["stats"]["views"],
                 title = project_dict["title"],
-                url = "https://scratch.mit.edu/projects/"+str(project_dict["id"])
+                url = "https://scratch.synt2x.xyz/projects/"+str(project_dict["id"])
             ))
         return projects
 
@@ -393,23 +393,23 @@ class User:
         """
         if limit is None:
             _projects = json.loads(requests.get(
-                f"https://api.scratch.mit.edu/users/{self.username}/favorites/?offset={offset}",
+                f"https://apiscratch.synt2x.xyz/users/{self.username}/favorites/?offset={offset}",
                 headers = {
                     "x-csrftoken": "a",
                     "x-requested-with": "XMLHttpRequest",
                     "Cookie": "scratchcsrftoken=a;scratchlanguage=en;",
-                    "referer": "https://scratch.mit.edu",
+                    "referer": "https://scratch.synt2x.xyz",
                     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36',
                 }
             ).text)
         else:
             _projects = requests.get(
-                f"https://api.scratch.mit.edu/users/{self.username}/favorites/?limit={limit}&offset={offset}",
+                f"https://apiscratch.synt2x.xyz/users/{self.username}/favorites/?limit={limit}&offset={offset}",
                 headers = {
                     "x-csrftoken": "a",
                     "x-requested-with": "XMLHttpRequest",
                     "Cookie": "scratchcsrftoken=a;scratchlanguage=en;",
-                    "referer": "https://scratch.mit.edu",
+                    "referer": "https://scratch.synt2x.xyz",
                     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36',
                 }
             ).json()
@@ -433,18 +433,18 @@ class User:
                 remixes = project_dict["stats"]["remixes"],
                 views = project_dict["stats"]["views"],
                 title = project_dict["title"],
-                url = "https://scratch.mit.edu/projects/"+str(project_dict["id"])
+                url = "https://scratch.synt2x.xyz/projects/"+str(project_dict["id"])
             ))
         return projects
 
     def favorites_count(self):
         text = requests.get(
-            f"https://scratch.mit.edu/users/{self.username}/favorites/",
+            f"https://scratch.synt2x.xyz/users/{self.username}/favorites/",
             headers = {
                 "x-csrftoken": "a",
                 "x-requested-with": "XMLHttpRequest",
                 "Cookie": "scratchcsrftoken=a;scratchlanguage=en;",
-                "referer": "https://scratch.mit.edu",
+                "referer": "https://scratch.synt2x.xyz",
                 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36',
             }
         ).text
@@ -456,7 +456,7 @@ class User:
         """
         You can only use this function if this object was created using :meth:`scratchattach.session.Session.connect_user`  
         """
-        requests.post(f"https://scratch.mit.edu/site-api/comments/user/{self.username}/toggle-comments/",
+        requests.post(f"https://scratch.synt2x.xyz/site-api/comments/user/{self.username}/toggle-comments/",
             headers = headers,
             cookies = self._cookies
         )
@@ -470,7 +470,7 @@ class User:
         """
         try:
             _projects = requests.get(
-                f"https://api.scratch.mit.edu/users/{self.username}/projects/recentlyviewed?limit={limit}&offset={offset}",
+                f"https://apiscratch.synt2x.xyz/users/{self.username}/projects/recentlyviewed?limit={limit}&offset={offset}",
                 headers = self._headers
             ).json()
             projects = []
@@ -493,7 +493,7 @@ class User:
                     remixes = project_dict["stats"]["remixes"],
                     views = project_dict["stats"]["views"],
                     title = project_dict["title"],
-                    url = "https://scratch.mit.edu/projects/"+str(project_dict["id"])
+                    url = "https://scratch.synt2x.xyz/projects/"+str(project_dict["id"])
                 ))
             return projects
         except Exception:
@@ -511,7 +511,7 @@ class User:
             raise(exceptions.Unauthorized)
             return
         requests.put(
-            f"https://scratch.mit.edu/site-api/users/all/{self.username}/",
+            f"https://scratch.synt2x.xyz/site-api/users/all/{self.username}/",
             headers = self._json_headers,
             cookies = self._cookies,
             data = json.dumps(dict(
@@ -535,7 +535,7 @@ class User:
             raise(exceptions.Unauthorized)
             return
         requests.put(
-            f"https://scratch.mit.edu/site-api/users/all/{self.username}/",
+            f"https://scratch.synt2x.xyz/site-api/users/all/{self.username}/",
             headers = self._json_headers,
             cookies = self._cookies,
             data = json.dumps(dict(
@@ -565,7 +565,7 @@ class User:
             raise(exceptions.Unauthorized)
             return
         requests.put(
-            f"https://scratch.mit.edu/site-api/users/all/{self.username}/",
+            f"https://scratch.synt2x.xyz/site-api/users/all/{self.username}/",
             headers = self._json_headers,
             cookies = self._cookies,
             data = json.dumps({"featured_project":int(project_id),"featured_project_label":label})
@@ -584,8 +584,8 @@ class User:
         headers = {
             'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
             'content-type': 'application/x-www-form-urlencoded',
-            'origin': 'https://scratch.mit.edu',
-            'referer': 'https://scratch.mit.edu/discuss/settings/TimMcCool/',
+            'origin': 'https://scratch.synt2x.xyz',
+            'referer': 'https://scratch.synt2x.xyz/discuss/settings/TimMcCool/',
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
         }
         data = {
@@ -593,7 +593,7 @@ class User:
             'signature': text,
             'update': '',
         }
-        response = requests.post(f'https://scratch.mit.edu/discuss/settings/{self.username}/', cookies=self._cookies, headers=headers, data=data)
+        response = requests.post(f'https://scratch.synt2x.xyz/discuss/settings/{self.username}/', cookies=self._cookies, headers=headers, data=data)
 
     def post_comment(self, content, *, parent_id="", commentee_id=""):
         """
@@ -615,7 +615,7 @@ class User:
         "parent_id": parent_id,
         }
         r = requests.post(
-            f"https://scratch.mit.edu/site-api/comments/user/{self.username}/add/",
+            f"https://scratch.synt2x.xyz/site-api/comments/user/{self.username}/add/",
             headers = headers,
             cookies = self._cookies,
             data=json.dumps(data),
@@ -642,7 +642,7 @@ class User:
         Returns:
             list<dict>: The user's activity data as parsed list of dicts
         """
-        return self._parse_activity(requests.get(f"https://scratch.mit.edu/messages/ajax/user-activity/?user={self.username}&max={limit}").text)
+        return self._parse_activity(requests.get(f"https://scratch.synt2x.xyz/messages/ajax/user-activity/?user={self.username}&max={limit}").text)
 
 
     def activity_html(self, *, limit=1000):
@@ -650,7 +650,7 @@ class User:
         Returns:
             str: The raw user activity HTML data
         """
-        return requests.get(f"https://scratch.mit.edu/messages/ajax/user-activity/?user={self.username}&max={limit}").text
+        return requests.get(f"https://scratch.synt2x.xyz/messages/ajax/user-activity/?user={self.username}&max={limit}").text
 
 
     def follow(self):
@@ -661,7 +661,7 @@ class User:
             raise(exceptions.Unauthenticated)
             return
         requests.put(
-            f"https://scratch.mit.edu/site-api/users/followers/{self.username}/add/?usernames={self._session._username}",
+            f"https://scratch.synt2x.xyz/site-api/users/followers/{self.username}/add/?usernames={self._session._username}",
             headers = headers,
             cookies = self._cookies,
         )
@@ -674,7 +674,7 @@ class User:
             raise(exceptions.Unauthenticated)
             return
         requests.put(
-            f"https://scratch.mit.edu/site-api/users/followers/{self.username}/remove/?usernames={self._session._username}",
+            f"https://scratch.synt2x.xyz/site-api/users/followers/{self.username}/remove/?usernames={self._session._username}",
             headers = headers,
             cookies = self._cookies,
         )
@@ -690,7 +690,7 @@ class User:
             raise(exceptions.Unauthenticated)
             return
         return requests.post(
-            f"https://scratch.mit.edu/site-api/comments/user/{self.username}/del/",
+            f"https://scratch.synt2x.xyz/site-api/comments/user/{self.username}/del/",
             headers = headers,
             cookies = self._cookies,
             data = json.dumps({"id":str(comment_id)})
@@ -707,7 +707,7 @@ class User:
             raise(exceptions.Unauthenticated)
             return
         return requests.post(
-            f"https://scratch.mit.edu/site-api/comments/user/{self.username}/rep/",
+            f"https://scratch.synt2x.xyz/site-api/comments/user/{self.username}/rep/",
             headers = headers,
             cookies = self._cookies,
             data = json.dumps({"id":str(comment_id)})
@@ -774,7 +774,7 @@ class User:
         Returns:
             list<dict>: A list containing the requested comments as dicts.
         """
-        URL = f"https://scratch.mit.edu/site-api/comments/user/{self.username}/?page={page}"
+        URL = f"https://scratch.synt2x.xyz/site-api/comments/user/{self.username}/?page={page}"
         return self._get_comments(URL)[:limit]
 
     def stats(self):
