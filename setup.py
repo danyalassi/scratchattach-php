@@ -2,22 +2,22 @@ from setuptools import setup, find_packages
 import codecs
 import os
 
-VERSION = '1.7.4'
-DESCRIPTION = 'An Scratch API Wrapper for scratch.mit.edu'
+VERSION = '1.0.0'
+DESCRIPTION = 'An Scratch-php API Wrapper for scratch.synt2x.xyz'
 LONG_DESCRIPTION = DESCRIPTION
 
 # Setting up
 setup(
-    name="scratchattach",
+    name="scratchattachPHP",
     version=VERSION,
     author="TimMcCool",
-    author_email="timmccool.scratch@gmail.com",
+    author_email="none@gmail.com",
     description=DESCRIPTION,
     long_description_content_type="text/markdown",
     long_description=open('README.md').read(),
     packages=find_packages(),
     install_requires=["websocket-client","numpy","requests","bs4"],
-    keywords=['scratch api', 'scratchattach', 'scratch api python', 'scratch python', 'scratch for python', 'scratch', 'scratch cloud', 'scratch cloud variables', 'scratch bot'],
+    keywords=['scratch-php api', 'scratchattach-php', 'scratch-php api python', 'scratch python', 'scratch for python', 'scratch-php', 'scratch-php cloud', 'scratch-php cloud variables', 'scratch-php bot'],
     url='https://github.com/TimMcCool/scratchattach',
     classifiers=[
         "Development Status :: 5 - Production/Stable",
