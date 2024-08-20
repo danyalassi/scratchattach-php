@@ -54,11 +54,11 @@ class CloudRequests:
                  used_cloud_vars=["1", "2", "3", "4", "5", "6", "7", "8", "9"],
                  ignore_exceptions=True,
                  _force_reconnect = False, # this argument is no longer used and only exists for backwards compatibility
-                 _log_url="https://clouddata.scratch.mit.edu/logs",
+                 _log_url="https://scratch.synt2x.xyz/logs",
                  _packet_length=245,
                  **kwargs
                  ):
-        if _log_url != "https://clouddata.scratch.mit.edu/logs":
+        if _log_url != "https://scratch.synt2x.xyz/logs":
             warnings.warn(
                 "Log URL isn't the URL of Scratch's clouddata logs. Don't use the _log_url parameter unless you know what you are doing",
                 RuntimeWarning)
