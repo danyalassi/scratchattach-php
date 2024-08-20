@@ -52,7 +52,7 @@ class Session():
         except Exception: pass
 
     def _get_csrftoken(self):
-        r = requests.get("https://scratch.mit.edu/csrf_token/").headers
+        r = requests.get("https://scratch.synt2x.xyz/csrf_token/").headers
         print(r)
         csrftoken = r["Set-Cookie"].split("scratchcsrftoken=")[1].split(";")[0]
         self._headers["x-csrftoken"] = csrftoken
@@ -63,12 +63,12 @@ class Session():
         # this will fetch the account token
         try:
             response = json.loads(requests.post(
-                "https://scratch.mit.edu/session",
+                "https://scratch.synt2x.xyz/session",
                 headers = {
                     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36',
                     "x-csrftoken": "a",
                     "x-requested-with": "XMLHttpRequest",
-                    "referer": "https://scratch.mit.edu",
+                    "referer": "https://scratch.synt2x.xyz",
                 },
                 cookies = {
                     "scratchsessionsid" : self.session_id,
@@ -128,7 +128,7 @@ class Session():
             descsort = ""
         try:
             targets = requests.get(
-                f"https://scratch.mit.edu/site-api/projects/{ordering}/?page={page}&ascsort={ascsort}&descsort={descsort}",
+                f"https://scratch.synt2x.xyz/site-api/projects/{ordering}/?page={page}&ascsort={ascsort}&descsort={descsort}",
                 headers = headers,
                 cookies = self._cookies,
             ).json()
@@ -142,14 +142,14 @@ class Session():
                         share_date = target["fields"]["datetime_shared"],
                         shared = target["fields"]["isPublished"],
                         id = target["pk"],
-                        thumbnail_url = "https://uploads.scratch.mit.edu"+target["fields"]["uncached_thumbnail_url"][1:],
+                        thumbnail_url = "https://apiscratch.synt2x.xyz"+target["fields"]["uncached_thumbnail_url"][1:],
                         favorites = target["fields"]["favorite_count"],
                         loves = target["fields"]["love_count"],
                         remixes = target["fields"]["remixers_count"],
                         views = target["fields"]["view_count"],
                         thumbnail_name = target["fields"]["thumbnail"],
                         title = target["fields"]["title"],
-                        url = "https://scratch.mit.edu/projects/" + str(target["pk"]),
+                        url = "https://scratch.synt2x.xyz/projects/" + str(target["pk"]),
                         comment_count = target["fields"]["commenters_count"],
                     )
                 )
@@ -171,7 +171,7 @@ class Session():
             list<dict>: List that contains all messages as dicts.
         '''
         return requests.get(
-            f"https://api.scratch.mit.edu/users/{self._username}/messages?limit={limit}&offset={offset}",
+            f"https://apiscratch.synt2x.xyz/users/{self._username}/messages?limit={limit}&offset={offset}",
             headers = self._headers,
             cookies = self._cookies,
         ).json()
@@ -181,7 +181,7 @@ class Session():
         Clears all messages.
         '''
         return requests.post(
-            "https://scratch.mit.edu/site-api/messages/messages-clear/",
+            "https://scratch.synt2x.xyz/site-api/messages/messages-clear/",
             headers = self._headers,
             cookies = self._cookies,
         ).text
@@ -193,7 +193,7 @@ class Session():
         Returns:
             int: message count
         '''
-        return json.loads(requests.get(f"https://api.scratch.mit.edu/users/{self._username}/messages/count/", headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.3c6 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36',}).text)["count"]
+        return json.loads(requests.get(f"https://apiscratch.synt2x.xyz/users/{self._username}/messages/count/", headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.3c6 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36',}).text)["count"]
 
     def get_feed(self, *, limit=20, offset=0):
         '''
@@ -203,7 +203,7 @@ class Session():
             list<dict>: List that contains all "What's happening" entries as dicts
         '''
         return requests.get(
-            f"https://api.scratch.mit.edu/users/{self._username}/following/users/activity?limit={limit}&offset={offset}",
+            f"https://apiscratch.synt2x.xyz/users/{self._username}/following/users/activity?limit={limit}&offset={offset}",
             headers = self._headers,
             cookies = self._cookies
         ).json()
@@ -213,7 +213,7 @@ class Session():
         try:
 
             return self.connect_project(requests.post(
-                "https://projects.scratch.mit.edu/",
+                "https://apiscratch.synt2x.xyz/",
                 headers = headers,
                 cookies = self._cookies
             ).json()["content-name"])
@@ -223,7 +223,7 @@ class Session():
     ''' # these APIs are always empty
     def created_by_followed_users(self, *, limit=40, offset=0):
         r = requests.get(
-            f"https://api.scratch.mit.edu/users/{self._username}/following/users/projects?limit={limit}&offset={offset}",
+            f"https://apiscratch.synt2x.xyz/users/{self._username}/following/users/projects?limit={limit}&offset={offset}",
             headers = self._headers,
             cookies = self._cookies
         ).json()
@@ -237,7 +237,7 @@ class Session():
 
     def added_to_followed_studios(self, *, limit=40, offset=0):
         r = requests.get(
-            f"https://api.scratch.mit.edu/users/{self._username}/following/studios/projects?limit={limit}&offset={offset}",
+            f"https://apiscratch.synt2x.xyz/users/{self._username}/following/studios/projects?limit={limit}&offset={offset}",
             headers = self._headers,
             cookies = self._cookies
         ).json()
@@ -258,7 +258,7 @@ class Session():
             list<scratchattach.project.Project>: List that contains all "Projects loved by Scratchers I'm following" entries as Project objects
         '''
         r = requests.get(
-            f"https://api.scratch.mit.edu/users/{self._username}/following/users/loves?limit={limit}&offset={offset}",
+            f"https://apiscratch.synt2x.xyz/users/{self._username}/following/users/loves?limit={limit}&offset={offset}",
             headers = self._headers,
             cookies = self._cookies
         ).json()
@@ -291,7 +291,7 @@ class Session():
         offs = 0
         resp = []
         for i in range(limit2):
-            resp2 = requests.get(f"https://api.scratch.mit.edu/search/projects?limit=40&offset={offs}&language={language}&mode={mode}&q={query}").json()
+            resp2 = requests.get(f"https://apiscratch.synt2x.xyz/search/projects?limit=40&offset={offs}&language={language}&mode={mode}&q={query}").json()
             if not resp2 == {"code":"BadRequest","message":""}:
                 resp += resp2
             offs+=40
@@ -323,7 +323,7 @@ class Session():
         offs = 0
         resp = []
         for i in range(limit2):
-            resp2 = requests.get(f"https://api.scratch.mit.edu/explore/projects?limit=40&offset={offs}&language={language}&mode={mode}&q={query}").json()
+            resp2 = requests.get(f"https://apiscratch.synt2x.xyz/explore/projects?limit=40&offset={offs}&language={language}&mode={mode}&q={query}").json()
             if not resp2 == {"code":"BadRequest","message":""}:
                 resp += resp2
             offs+=40
@@ -344,7 +344,7 @@ class Session():
             list<dict>: List that contains the backpack items as dicts
         '''
         return requests.get(
-            f"https://backpack.scratch.mit.edu/{self._username}?limit={limit}&offset={offset}",
+            f"https://backpack.synt2x.xyz/{self._username}?limit={limit}&offset={offset}",
             headers = self._headers,
         ).json()
 
@@ -356,7 +356,7 @@ class Session():
             asset_id: ID of the asset that will be deleted.
         '''
         return requests.delete(
-            f"https://backpack.scratch.mit.edu/{self._username}/{asset_id}",
+            f"https://backpack.synt2x.xyz/{self._username}/{asset_id}",
             headers = self._headers,
         ).json()
 
@@ -529,7 +529,7 @@ class Session():
             file_ext = pathlib.Path(asset).suffix
 
         requests.post(
-            f"https://assets.scratch.mit.edu/{hashlib.md5(data).hexdigest()}.{file_ext}",
+            f"https://assets.synt2x.xyz/{hashlib.md5(data).hexdigest()}.{file_ext}",
             headers=self._headers,
             data=data,
         )
@@ -555,7 +555,7 @@ def login(username, password):
     _headers = headers
     _headers["Cookie"] = "scratchcsrftoken=a;scratchlanguage=en;"
     request = requests.post(
-        "https://scratch.mit.edu/login/", data=data, headers=_headers
+        "https://scratch.synt2x.xyz/login/", data=data, headers=_headers
     )
     try:
         session_id = str(re.search('"(.*)"', request.headers["Set-Cookie"]).group())
